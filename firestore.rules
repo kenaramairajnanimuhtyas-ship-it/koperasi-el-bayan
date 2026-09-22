@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Koperasi El-Bayan:
+    // Koleksi umum produk, kategori, pengaturan toko, pesanan, dan transaksi
+    // Terbuka untuk read dan write bagi operasional sistem koperasi dan konsumen santri
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

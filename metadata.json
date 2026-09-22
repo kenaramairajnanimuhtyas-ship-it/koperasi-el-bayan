@@ -1,0 +1,6 @@
+{
+  "name": "Katalog & Kasir Koperasi El-Bayan",
+  "description": "Sistem Informasi Pemasaran Berbentuk Katalog Berbasis Website yang Terintegrasi dengan Sistem Kasir pada Koperasi El-Bayan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

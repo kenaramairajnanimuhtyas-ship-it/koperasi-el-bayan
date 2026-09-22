@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "products": {
+      "title": "Produk",
+      "description": "Koleksi produk koperasi pesantren El-Bayan",
+      "fields": {
+        "id_produk": { "type": "number", "description": "ID numerik unik produk" },
+        "id_kategori": { "type": "number", "description": "ID kategori produk" },
+        "nama": { "type": "string", "description": "Nama produk" },
+        "deskripsi": { "type": "string", "description": "Deskripsi produk" },
+        "harga": { "type": "number", "description": "Harga jual dalam Rupiah" },
+        "stok": { "type": "number", "description": "Jumlah stok barang saat ini" },
+        "gambar": { "type": "string", "description": "URL atau data gambar produk" },
+        "created_at": { "type": "string", "description": "Waktu pembuatan produk" }
+      }
+    },
+    "categories": {
+      "title": "Kategori",
+      "description": "Kategori barang koperasi",
+      "fields": {
+        "id_kategori": { "type": "number", "description": "ID kategori" },
+        "nama_kategori": { "type": "string", "description": "Nama kategori" },
+        "deskripsi": { "type": "string", "description": "Deskripsi opsional" }
+      }
+    },
+    "orders": {
+      "title": "Pesanan",
+      "description": "Pesanan belanja online konsumen santri/wali santri",
+      "fields": {
+        "id_pesanan": { "type": "number", "description": "ID unik pesanan" },
+        "no_pesanan": { "type": "string", "description": "Nomor pesanan ORD-..." },
+        "id_konsumen": { "type": "number", "description": "ID profil konsumen" },
+        "nama_konsumen": { "type": "string", "description": "Nama konsumen" },
+        "no_hp": { "type": "string", "description": "Nomor telepon/WA" },
+        "tanggal_pesanan": { "type": "string", "description": "Waktu pemesanan" },
+        "total": { "type": "number", "description": "Total nominal belanja" },
+        "status": { "type": "string", "description": "menunggu | diproses | selesai | batal" },
+        "metode_pembayaran": { "type": "string", "description": "tunai | transfer | qris" },
+        "catatan": { "type": "string", "description": "Catatan tambahan pembeli" },
+        "bukti_pembayaran": { "type": "string", "description": "Foto/struk bukti transfer" },
+        "items": { "type": "array", "description": "Daftar item produk pesanan" }
+      }
+    },
+    "transactions": {
+      "title": "Transaksi",
+      "description": "Riwayat transaksi kasir kasir POS",
+      "fields": {
+        "id_transaksi": { "type": "number", "description": "ID transaksi POS" },
+        "no_transaksi": { "type": "string", "description": "Nomor faktur transaksi TRX-..." },
+        "id_pesanan": { "type": "number", "description": "ID pesanan terkait jika dari pesanan online" },
+        "no_pesanan": { "type": "string", "description": "Nomor pesanan terkait" },
+        "id_user": { "type": "number", "description": "ID kasir/petugas" },
+        "nama_kasir": { "type": "string", "description": "Nama kasir/petugas" },
+        "nama_konsumen": { "type": "string", "description": "Nama pembeli" },
+        "tanggal_transaksi": { "type": "string", "description": "Waktu transaksi selesai" },
+        "total_bayar": { "type": "number", "description": "Total tagihan" },
+        "nominal_dibayar": { "type": "number", "description": "Uang tunai diterima" },
+        "kembalian": { "type": "number", "description": "Uang kembalian" },
+        "metode_bayar": { "type": "string", "description": "tunai | transfer | qris" },
+        "status": { "type": "string", "description": "berhasil | pending | batal" },
+        "items": { "type": "array", "description": "Daftar barang terjual" }
+      }
+    },
+    "store_settings": {
+      "title": "Pengaturan Koperasi",
+      "description": "Data profil toko, rekening bank, kontak koperasi",
+      "fields": {
+        "namaKoperasi": { "type": "string" },
+        "tagline": { "type": "string" },
+        "alamat": { "type": "string" },
+        "noHp": { "type": "string" },
+        "email": { "type": "string" },
+        "strukFooter": { "type": "string" },
+        "rekeningBank": { "type": "object" }
+      }
+    }
+  }
+}
