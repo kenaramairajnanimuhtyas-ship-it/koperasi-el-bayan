@@ -804,7 +804,7 @@ export default function App() {
                 onClearImportedOrder={() => setPosPrefilledOrder(null)}
                 onProcessPayment={handleProcessPaymentPos}
                 onOpenReceipt={handleOpenReceiptById}
-                cashierName={currentUser?.name || 'Siti Rahmawati (Kasir)'}
+                cashierName={currentUser?.name || 'Sabiq'}
               />
             )}
 

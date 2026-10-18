@@ -166,9 +166,9 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
             <div className="mt-1 text-slate-600 dark:text-slate-300 space-y-0.5 font-mono text-[11px]">
               <div>
                 {targetRole === 'admin' ? (
-                  <>Username: <b className="text-emerald-700 dark:text-emerald-400">admin</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">admin123</b></>
+                  <>Nama: <b className="text-emerald-700 dark:text-emerald-400 font-sans">Fuad</b> | User: <b className="text-emerald-700 dark:text-emerald-400">admin</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">admin123</b></>
                 ) : (
-                  <>Username: <b className="text-emerald-700 dark:text-emerald-400">kasir</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">kasir123</b></>
+                  <>Nama: <b className="text-emerald-700 dark:text-emerald-400 font-sans">Sabiq</b> | User: <b className="text-emerald-700 dark:text-emerald-400">kasir</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">kasir123</b></>
                 )}
               </div>
             </div>

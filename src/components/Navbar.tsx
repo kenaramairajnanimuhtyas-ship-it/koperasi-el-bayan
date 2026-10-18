@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                   <div className="text-left leading-tight">
                     <div className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 truncate max-w-[75px] xs:max-w-[100px] sm:max-w-[140px]">
-                      {currentUser ? currentUser.name : (currentRole === 'admin' ? 'Administrator' : 'Petugas Kasir')}
+                      {currentUser ? currentUser.name : (currentRole === 'admin' ? 'Fuad' : 'Sabiq')}
                     </div>
                     <div className="text-[9px] sm:text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
                       {currentRole === 'admin' ? 'Admin' : 'Kasir POS'}

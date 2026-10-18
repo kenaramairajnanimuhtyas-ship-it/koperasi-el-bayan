@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CartItem, Konsumen, PaymentMethod, Order } from '../../types';
+import { CartItem, Konsumen, PaymentMethod, Order, DetailPesanan } from '../../types';
 import { formatRupiah, generateOrderNumber } from '../../utils/formatters';
 import { ImageUploader } from '../shared/ImageUploader';
 import {
@@ -58,16 +58,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     const orderNo = generateOrderNumber();
     const now = new Date().toISOString();
 
-    const orderItems = cart.map((it, idx) => ({
-      id_detail: orderId + idx,
-      id_pesanan: orderId,
-      id_produk: it.product.id_produk,
-      nama_produk: it.product.nama,
-      gambar: it.product.gambar,
-      jumlah: it.jumlah,
-      harga: it.product.harga,
-      subtotal: it.product.harga * it.jumlah,
-    }));
+    const orderItems: DetailPesanan[] = cart.map((it, idx) => {
+      const item: DetailPesanan = {
+        id_detail: orderId + idx,
+        id_pesanan: orderId,
+        id_produk: it.product.id_produk,
+        nama_produk: it.product.nama,
+        jumlah: it.jumlah,
+        harga: it.product.harga,
+        subtotal: it.product.harga * it.jumlah,
+      };
+      if (it.product.gambar) {
+        item.gambar = it.product.gambar;
+      }
+      return item;
+    });
 
     const newOrder: Order = {
       id_pesanan: orderId,
@@ -79,9 +84,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       total,
       status: 'menunggu',
       metode_pembayaran: paymentMethod,
-      catatan: notes.trim(),
-      bukti_pembayaran: paymentProof.trim() || undefined,
+      catatan: notes.trim() || '',
       items: orderItems,
+      ...(paymentProof.trim() ? { bukti_pembayaran: paymentProof.trim() } : {}),
     };
 
     setTimeout(() => {

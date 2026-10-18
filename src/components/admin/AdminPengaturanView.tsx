@@ -10,6 +10,10 @@ import {
   RotateCcw,
   CheckCircle2,
   AlertTriangle,
+  Database,
+  Download,
+  Copy,
+  Code,
 } from 'lucide-react';
 
 interface AdminPengaturanViewProps {
@@ -135,6 +139,96 @@ export const AdminPengaturanView: React.FC<AdminPengaturanViewProps> = ({
           </button>
         </div>
       </form>
+
+      {/* MySQL Database Section */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-blue-200 dark:border-blue-900/40 p-3.5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                Database MySQL Koperasi El-Bayan
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Skema tabel relasional lengkap (InnoDB, Foreign Key, Views & Seed Data) untuk phpMyAdmin / MySQL Workbench.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="/koperasi_elbayan.sql"
+              download="koperasi_elbayan.sql"
+              className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs shadow-blue-600/30 flex items-center justify-center gap-2 transition-all"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download File .SQL</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Tabel Ringkasan Skema */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 text-xs">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>users</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">Admin & Kasir</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Autentikasi role, username, password_hash</p>
+          </div>
+
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>produk & kategori</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">Katalog</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Stok, harga, relasi foreign key kategori</p>
+          </div>
+
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>pesanan & detail</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">Order Online</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Nomor pesanan, santri/konsumen, item beli</p>
+          </div>
+
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>transaksi & detail</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">Kasir POS</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Struk POS, kasir, tunai/transfer/QRIS, kembalian</p>
+          </div>
+
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>pengaturan_toko</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Konfigurasi</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Nama profil koperasi, alamat, footer nota</p>
+          </div>
+
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <span>3 SQL Views</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300">Laporan</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Omset harian, produk terlaris, stok menipis</p>
+          </div>
+        </div>
+
+        <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/30 text-[11px] text-blue-900 dark:text-blue-300 flex items-start gap-2">
+          <Code className="w-4 h-4 mt-0.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+          <div>
+            <p className="font-semibold">Cara Import ke phpMyAdmin / XAMPP / Laragon:</p>
+            <p className="text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
+              1. Buka <strong>phpMyAdmin</strong> (<code className="px-1 py-0.5 bg-blue-100/60 dark:bg-blue-900/60 rounded">http://localhost/phpmyadmin</code>) &rarr; klik tab <strong>Import</strong> &rarr; pilih file <strong>koperasi_elbayan.sql</strong> yang telah didownload &rarr; klik <strong>Go / Kirim</strong>. Database <code className="px-1 py-0.5 bg-blue-100/60 dark:bg-blue-900/60 rounded">koperasi_elbayan</code> akan langsung terbuat secara otomatis.
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Danger Zone: Reset Data */}
       <div className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-rose-200 dark:border-rose-900/40 p-3.5 sm:p-6 shadow-xs space-y-2.5 sm:space-y-3">

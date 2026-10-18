@@ -26,6 +26,28 @@ const COLLECTIONS = {
   KONSUMEN: 'customers',
 };
 
+/**
+ * Recursively cleans an object by removing any properties with value `undefined`.
+ * Firestore rejects writes with FirebaseError if any field in setDoc / batch.set is undefined.
+ */
+export function cleanDataForFirestore<T>(data: T): T {
+  if (data === null || typeof data !== 'object') {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data
+      .filter((item) => item !== undefined)
+      .map((item) => cleanDataForFirestore(item)) as unknown as T;
+  }
+  const cleanObj: Record<string, any> = {};
+  for (const [key, value] of Object.entries(data as Record<string, any>)) {
+    if (value !== undefined) {
+      cleanObj[key] = cleanDataForFirestore(value);
+    }
+  }
+  return cleanObj as T;
+}
+
 export class FirestoreSyncService {
   /**
    * Listen to real-time products collection
@@ -158,30 +180,30 @@ export class FirestoreSyncService {
         // Seed products
         initialData.produk.forEach((p) => {
           const docRef = doc(db, COLLECTIONS.PRODUK, String(p.id_produk));
-          batch.set(docRef, p);
+          batch.set(docRef, cleanDataForFirestore(p));
         });
 
         // Seed categories
         initialData.kategori.forEach((c) => {
           const docRef = doc(db, COLLECTIONS.KATEGORI, String(c.id_kategori));
-          batch.set(docRef, c);
+          batch.set(docRef, cleanDataForFirestore(c));
         });
 
         // Seed orders
         initialData.orders.forEach((o) => {
           const docRef = doc(db, COLLECTIONS.ORDERS, String(o.id_pesanan));
-          batch.set(docRef, o);
+          batch.set(docRef, cleanDataForFirestore(o));
         });
 
         // Seed transactions
         initialData.transaksi.forEach((t) => {
           const docRef = doc(db, COLLECTIONS.TRANSAKSI, String(t.id_transaksi));
-          batch.set(docRef, t);
+          batch.set(docRef, cleanDataForFirestore(t));
         });
 
         // Seed settings
         const settingsRef = doc(db, COLLECTIONS.SETTINGS, 'general');
-        batch.set(settingsRef, initialData.settings);
+        batch.set(settingsRef, cleanDataForFirestore(initialData.settings));
 
         await batch.commit();
         console.log('Initial data seeded successfully to Firestore');
@@ -195,7 +217,7 @@ export class FirestoreSyncService {
   static async saveProduct(prod: Produk) {
     try {
       const docRef = doc(db, COLLECTIONS.PRODUK, String(prod.id_produk));
-      await setDoc(docRef, prod);
+      await setDoc(docRef, cleanDataForFirestore(prod));
     } catch (err) {
       console.error('Firestore saveProduct error:', err);
     }
@@ -213,7 +235,7 @@ export class FirestoreSyncService {
   static async saveCategory(cat: Kategori) {
     try {
       const docRef = doc(db, COLLECTIONS.KATEGORI, String(cat.id_kategori));
-      await setDoc(docRef, cat);
+      await setDoc(docRef, cleanDataForFirestore(cat));
     } catch (err) {
       console.error('Firestore saveCategory error:', err);
     }
@@ -231,7 +253,7 @@ export class FirestoreSyncService {
   static async saveOrder(order: Order) {
     try {
       const docRef = doc(db, COLLECTIONS.ORDERS, String(order.id_pesanan));
-      await setDoc(docRef, order);
+      await setDoc(docRef, cleanDataForFirestore(order));
     } catch (err) {
       console.error('Firestore saveOrder error:', err);
     }
@@ -240,7 +262,7 @@ export class FirestoreSyncService {
   static async saveTransaction(trx: Transaksi) {
     try {
       const docRef = doc(db, COLLECTIONS.TRANSAKSI, String(trx.id_transaksi));
-      await setDoc(docRef, trx);
+      await setDoc(docRef, cleanDataForFirestore(trx));
     } catch (err) {
       console.error('Firestore saveTransaction error:', err);
     }
@@ -249,7 +271,7 @@ export class FirestoreSyncService {
   static async saveSettings(settings: StoreSettings) {
     try {
       const docRef = doc(db, COLLECTIONS.SETTINGS, 'general');
-      await setDoc(docRef, settings);
+      await setDoc(docRef, cleanDataForFirestore(settings));
     } catch (err) {
       console.error('Firestore saveSettings error:', err);
     }
@@ -260,7 +282,7 @@ export class FirestoreSyncService {
       const batch = writeBatch(db);
       products.forEach((p) => {
         const docRef = doc(db, COLLECTIONS.PRODUK, String(p.id_produk));
-        batch.set(docRef, p);
+        batch.set(docRef, cleanDataForFirestore(p));
       });
       await batch.commit();
     } catch (err) {

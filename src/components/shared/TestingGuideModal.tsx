@@ -25,7 +25,7 @@ interface StepItem {
 }
 
 const steps: StepItem[] = [
-  { id: 1, title: 'Admin login', role: 'admin', subTab: 'dashboard', desc: 'Login menggunakan username "admin" dan password "admin123".' },
+  { id: 1, title: 'Admin (Fuad) login', role: 'admin', subTab: 'dashboard', desc: 'Login sebagai Admin Fuad menggunakan username "admin" dan password "admin123".' },
   { id: 2, title: 'Admin membuat kategori', role: 'admin', subTab: 'kategori', desc: 'Buka menu Kategori, tambah kategori baru (contoh: "Kitab Pesantren").' },
   { id: 3, title: 'Admin membuat produk dengan stok 20', role: 'admin', subTab: 'produk', desc: 'Tambah produk baru dengan nama unik, pilih kategori, isi harga dan set stok tepat 20.' },
   { id: 4, title: 'Produk otomatis muncul di katalog', role: 'konsumen', subTab: 'katalog', desc: 'Beralih ke Katalog Konsumen, periksa bahwa produk baru tampil secara realtime.' },
@@ -35,7 +35,7 @@ const steps: StepItem[] = [
   { id: 8, title: 'Konsumen membeli 2 produk', role: 'konsumen', subTab: 'katalog', desc: 'Pilih jumlah 2 pcs dan klik tombol "Tambah ke Keranjang".' },
   { id: 9, title: 'Konsumen checkout', role: 'konsumen', subTab: 'katalog', desc: 'Buka keranjang belanja, periksa subtotal, lalu klik "Lanjut ke Checkout".' },
   { id: 10, title: 'Pesanan masuk ke sistem', role: 'konsumen', subTab: 'pesanan_saya', desc: 'Konfirmasi pesanan. Nomor pesanan unik otomatis terbit dengan status "MENUNGGU".' },
-  { id: 11, title: 'Kasir login', role: 'kasir', subTab: 'dashboard', desc: 'Login sebagai Kasir menggunakan username "kasir" dan password "kasir123".' },
+  { id: 11, title: 'Kasir (Sabiq) login', role: 'kasir', subTab: 'dashboard', desc: 'Login sebagai Kasir Sabiq menggunakan username "kasir" dan password "kasir123".' },
   { id: 12, title: 'Kasir melihat pesanan baru', role: 'kasir', subTab: 'pesanan_masuk', desc: 'Buka menu "Pesanan Masuk", pesanan konsumen tadi muncul dalam antrean.' },
   { id: 13, title: 'Kasir membuka detail pesanan', role: 'kasir', subTab: 'pesanan_masuk', desc: 'Klik detail pesanan untuk memverifikasi item belanja dan identitas pemesan.' },
   { id: 14, title: 'Kasir memproses pesanan', role: 'kasir', subTab: 'pesanan_masuk', desc: 'Ubah status menjadi "DIPROSES" atau klik "Proses di POS Kasir".' },

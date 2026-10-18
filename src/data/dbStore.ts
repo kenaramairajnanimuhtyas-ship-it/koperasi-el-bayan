@@ -15,7 +15,7 @@ export const initialUsers: User[] = [
   {
     id: 1,
     username: 'admin',
-    name: 'Ust. Ahmad Fauzi (Admin)',
+    name: 'Fuad',
     role: 'admin',
     password_hash: 'admin123',
     created_at: '2026-01-01T08:00:00.000Z',
@@ -23,7 +23,7 @@ export const initialUsers: User[] = [
   {
     id: 2,
     username: 'kasir',
-    name: 'Siti Rahmawati (Kasir)',
+    name: 'Sabiq',
     role: 'kasir',
     password_hash: 'kasir123',
     created_at: '2026-01-01T08:00:00.000Z',
@@ -271,7 +271,7 @@ export const initialTransaksi: Transaksi[] = [
     id_pesanan: 101,
     no_pesanan: 'ORD-ELB-20260210-001',
     id_user: 2,
-    nama_kasir: 'Siti Rahmawati (Kasir)',
+    nama_kasir: 'Sabiq',
     nama_konsumen: 'Muhammad Ilham',
     no_hp_konsumen: '081234567890',
     tanggal_transaksi: '2026-02-10T14:35:00.000Z',
@@ -351,7 +351,18 @@ function setStored<T>(key: string, data: T): void {
 // Database Service Class
 export class ElBayanDB {
   static getUsers(): User[] {
-    return getStored<User[]>(STORAGE_KEYS.USERS, initialUsers);
+    const rawUsers = getStored<User[]>(STORAGE_KEYS.USERS, initialUsers);
+    const updatedUsers = rawUsers.map((u) => {
+      if (u.role === 'admin' || u.username === 'admin') {
+        return { ...u, name: 'Fuad' };
+      }
+      if (u.role === 'kasir' || u.username === 'kasir') {
+        return { ...u, name: 'Sabiq' };
+      }
+      return u;
+    });
+    setStored(STORAGE_KEYS.USERS, updatedUsers);
+    return updatedUsers;
   }
 
   static getKategori(): Kategori[] {
@@ -379,7 +390,13 @@ export class ElBayanDB {
   }
 
   static getTransaksi(): Transaksi[] {
-    return getStored<Transaksi[]>(STORAGE_KEYS.TRANSAKSI, initialTransaksi);
+    const rawTrx = getStored<Transaksi[]>(STORAGE_KEYS.TRANSAKSI, initialTransaksi);
+    return rawTrx.map((t) => {
+      if (t.nama_kasir && (t.nama_kasir.includes('Rahmawati') || t.nama_kasir.includes('Kasir'))) {
+        return { ...t, nama_kasir: 'Sabiq' };
+      }
+      return t;
+    });
   }
 
   static saveTransaksi(transaksiList: Transaksi[]): void {
