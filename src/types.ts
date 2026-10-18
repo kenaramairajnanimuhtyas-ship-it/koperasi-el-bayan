@@ -99,6 +99,12 @@ export interface StoreSettings {
     nomor: string;
     atasNama: string;
   };
+  // Konfigurasi QRIS & Pembayaran Digital
+  qrisImageUrl?: string;
+  qrisMerchantName?: string;
+  qrisNmid?: string;
+  qrisNotes?: string;
+  qrisUpdatedAt?: string;
 }
 
 export interface ProcessPaymentResult {
@@ -114,7 +120,8 @@ export type AdminTab =
   | 'kategori'
   | 'pesanan'
   | 'laporan'
-  | 'pengaturan';
+  | 'pengaturan'
+  | 'pengguna';
 
 export type KasirTab =
   | 'dashboard'

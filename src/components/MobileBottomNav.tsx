@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRole, Konsumen, User } from '../types';
+import { AppRole, Konsumen, User, AdminTab } from '../types';
 import {
   Store,
   ShoppingCart,
@@ -20,8 +20,8 @@ interface MobileBottomNavProps {
   setKonsumenTab: (tab: 'katalog' | 'pesanan') => void;
   kasirTab: 'pos' | 'pesanan' | 'riwayat' | 'dashboard';
   setKasirTab: (tab: 'pos' | 'pesanan' | 'riwayat' | 'dashboard') => void;
-  adminTab: 'dashboard' | 'produk' | 'kategori' | 'pesanan' | 'laporan' | 'pengaturan';
-  setAdminTab: (tab: 'dashboard' | 'produk' | 'kategori' | 'pesanan' | 'laporan' | 'pengaturan') => void;
+  adminTab: AdminTab;
+  setAdminTab: (tab: AdminTab) => void;
   cartCount: number;
   onOpenCart: () => void;
   pendingOrdersCount: number;
@@ -216,6 +216,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           >
             <Settings className="w-5 h-5 mb-0.5" />
             <span className="text-[10px] leading-tight">Setting</span>
+          </button>
+
+          <button
+            onClick={() => setAdminTab('pengguna')}
+            className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-xl transition-all ${
+              adminTab === 'pengguna'
+                ? 'text-emerald-600 dark:text-emerald-400 font-bold'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            <Users className="w-5 h-5 mb-0.5" />
+            <span className="text-[10px] leading-tight">Pengguna</span>
           </button>
         </div>
       )}

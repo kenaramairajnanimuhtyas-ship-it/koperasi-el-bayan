@@ -44,6 +44,7 @@ import { AdminKategoriView } from './components/admin/AdminKategoriView';
 import { AdminPesananView } from './components/admin/AdminPesananView';
 import { AdminLaporanView } from './components/admin/AdminLaporanView';
 import { AdminPengaturanView } from './components/admin/AdminPengaturanView';
+import { AdminPenggunaView } from './components/admin/AdminPenggunaView';
 
 import {
   Store,
@@ -54,6 +55,7 @@ import {
   FileText,
   BarChart3,
   Settings,
+  Users,
   Clock,
   CheckCircle2,
   AlertCircle,
@@ -81,7 +83,8 @@ export default function App() {
   const [orders, setOrders] = useState<Order[]>(() => ElBayanDB.getOrders());
   const [transactions, setTransactions] = useState<Transaksi[]>(() => ElBayanDB.getTransaksi());
   const [storeSettings, setStoreSettings] = useState<StoreSettings>(() => ElBayanDB.getSettings());
-  const [allUsers] = useState<User[]>(() => ElBayanDB.getUsers());
+  const [allUsers, setAllUsers] = useState<User[]>(() => ElBayanDB.getUsers());
+  const [allKonsumen, setAllKonsumen] = useState<Konsumen[]>(() => ElBayanDB.getKonsumen());
   const [isDbConnected, setIsDbConnected] = useState<boolean>(true);
 
   // ----------------------------------------------------
@@ -211,6 +214,8 @@ export default function App() {
     setOrders(ElBayanDB.getOrders());
     setTransactions(ElBayanDB.getTransaksi());
     setStoreSettings(ElBayanDB.getSettings());
+    setAllUsers(ElBayanDB.getUsers());
+    setAllKonsumen(ElBayanDB.getKonsumen());
   };
 
   // ----------------------------------------------------
@@ -249,6 +254,19 @@ export default function App() {
   const handleSaveKonsumen = (konsumen: Konsumen) => {
     setCurrentKonsumen(konsumen);
     localStorage.setItem('elbayan_current_konsumen', JSON.stringify(konsumen));
+    
+    // Update daftar allKonsumen
+    const currentList = ElBayanDB.getKonsumen();
+    const existingIndex = currentList.findIndex((k) => k.no_hp === konsumen.no_hp);
+    let updated: Konsumen[];
+    if (existingIndex >= 0) {
+      updated = currentList.map((k) => (k.no_hp === konsumen.no_hp ? konsumen : k));
+    } else {
+      updated = [...currentList, konsumen];
+    }
+    ElBayanDB.saveKonsumen(updated);
+    setAllKonsumen(updated);
+
     setIsOnboardingOpen(false);
     showToast(`Profil pembeli "${konsumen.name}" berhasil disimpan.`, 'success');
   };
@@ -515,6 +533,19 @@ export default function App() {
     ElBayanDB.saveSettings(settings);
     setStoreSettings(settings);
     FirestoreSyncService.saveSettings(settings);
+    showToast('Pengaturan Koperasi & QRIS berhasil disimpan ke database cloud!', 'success');
+  };
+
+  const handleAdminSaveUsers = (updatedUsers: User[]) => {
+    ElBayanDB.saveUsers(updatedUsers);
+    setAllUsers(updatedUsers);
+    showToast('Data petugas sistem (users) berhasil disimpan.', 'success');
+  };
+
+  const handleAdminSaveKonsumen = (updatedKonsumen: Konsumen[]) => {
+    ElBayanDB.saveKonsumen(updatedKonsumen);
+    setAllKonsumen(updatedKonsumen);
+    showToast('Data konsumen/santri berhasil disimpan.', 'success');
   };
 
   const handleAdminResetDemoData = () => {
@@ -540,6 +571,7 @@ export default function App() {
       else if (subTab === 'pesanan') setAdminTab('pesanan');
       else if (subTab === 'laporan') setAdminTab('laporan');
       else if (subTab === 'pengaturan') setAdminTab('pengaturan');
+      else if (subTab === 'pengguna') setAdminTab('pengguna');
       else setAdminTab('dashboard');
     }
     setIsTestingGuideOpen(false);
@@ -759,6 +791,18 @@ export default function App() {
                 <Settings className="w-3.5 h-3.5" />
                 <span>Pengaturan Koperasi</span>
               </button>
+
+              <button
+                onClick={() => setAdminTab('pengguna')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  adminTab === 'pengguna'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>Pengguna & Konsumen</span>
+              </button>
             </div>
           )}
         </div>
@@ -777,6 +821,7 @@ export default function App() {
                 categories={categories}
                 onAddToCart={handleAddToCart}
                 cart={cart}
+                storeSettings={storeSettings}
                 onOpenCart={() => setIsCartOpen(true)}
               />
             )}
@@ -785,6 +830,7 @@ export default function App() {
               <PesananSayaView
                 orders={orders}
                 consumerPhone={currentKonsumen?.no_hp}
+                storeSettings={storeSettings}
                 onNavigateKatalog={() => setKonsumenTab('katalog')}
               />
             )}
@@ -805,6 +851,7 @@ export default function App() {
                 onProcessPayment={handleProcessPaymentPos}
                 onOpenReceipt={handleOpenReceiptById}
                 cashierName={currentUser?.name || 'Sabiq'}
+                storeSettings={storeSettings}
               />
             )}
 
@@ -897,6 +944,16 @@ export default function App() {
                 onResetDemoData={handleAdminResetDemoData}
               />
             )}
+
+            {adminTab === 'pengguna' && (
+              <AdminPenggunaView
+                users={allUsers}
+                konsumen={allKonsumen}
+                orders={orders}
+                onSaveUsers={handleAdminSaveUsers}
+                onSaveKonsumen={handleAdminSaveKonsumen}
+              />
+            )}
           </>
         )}
       </main>
@@ -920,6 +977,7 @@ export default function App() {
         <CheckoutModal
           cart={cart}
           currentKonsumen={currentKonsumen}
+          storeSettings={storeSettings}
           onClose={() => setIsCheckoutOpen(false)}
           onConfirmOrder={handleConfirmOrder}
         />

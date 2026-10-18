@@ -215,6 +215,10 @@ CREATE TABLE `pengaturan_toko` (
   `bank_nama` VARCHAR(100) NOT NULL,
   `bank_nomor` VARCHAR(50) NOT NULL,
   `bank_atas_nama` VARCHAR(100) NOT NULL,
+  `qris_image_url` LONGTEXT NULL,
+  `qris_merchant_name` VARCHAR(150) NULL,
+  `qris_nmid` VARCHAR(50) NULL,
+  `qris_notes` TEXT NULL,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -332,8 +336,8 @@ INSERT INTO `detail_transaksi` (`id_detail`, `id_transaksi`, `id_produk`, `nama_
 (2, 1001, 2, 'Pulpen Gel Hitam 0.5mm (Kotak 12 pcs)', 1, 24000.00, 24000.00);
 
 -- Data Pengaturan Toko
-INSERT INTO `pengaturan_toko` (`id`, `nama_koperasi`, `tagline`, `alamat`, `no_hp`, `email`, `struk_footer`, `bank_nama`, `bank_nomor`, `bank_atas_nama`) VALUES
-(1, 'KOPERASI EL-BAYAN', 'Katalog Pemasaran & Kasir Digital Terintegrasi', 'Jl. Pesantren El-Bayan No. 12, Jawa Tengah', '0812-3456-7890', 'koperasi@elbayan.sch.id', 'Terima kasih atas kunjungan & belanja Anda di Koperasi El-Bayan. Semoga berkah.', 'Bank Syariah Indonesia (BSI)', '712-3456-789', 'KOPERASI EL-BAYAN');
+INSERT INTO `pengaturan_toko` (`id`, `nama_koperasi`, `tagline`, `alamat`, `no_hp`, `email`, `struk_footer`, `bank_nama`, `bank_nomor`, `bank_atas_nama`, `qris_merchant_name`, `qris_nmid`, `qris_notes`) VALUES
+(1, 'KOPERASI EL-BAYAN', 'Katalog Pemasaran & Kasir Digital Terintegrasi', 'Jl. Pesantren El-Bayan No. 12, Jawa Tengah', '0812-3456-7890', 'koperasi@elbayan.sch.id', 'Terima kasih atas kunjungan & belanja Anda di Koperasi El-Bayan. Semoga berkah.', 'Bank Syariah Indonesia (BSI)', '712-3456-789', 'KOPERASI EL-BAYAN', 'KOPERASI EL-BAYAN PONPES', 'ID1020260210001', 'Mendukung semua m-Banking & e-Wallet');
 
 SET FOREIGN_KEY_CHECKS = 1;
 -- ====================================================================

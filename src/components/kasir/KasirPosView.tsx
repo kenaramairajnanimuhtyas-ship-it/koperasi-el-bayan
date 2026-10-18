@@ -6,8 +6,10 @@ import {
   Order,
   PaymentMethod,
   ProcessPaymentResult,
+  StoreSettings,
 } from '../../types';
 import { formatRupiah } from '../../utils/formatters';
+import { QrisModal } from '../shared/QrisModal';
 import {
   Search,
   ShoppingCart,
@@ -45,6 +47,7 @@ interface KasirPosViewProps {
   }) => ProcessPaymentResult;
   onOpenReceipt: (trxId: number) => void;
   cashierName: string;
+  storeSettings?: StoreSettings;
 }
 
 export const KasirPosView: React.FC<KasirPosViewProps> = ({
@@ -55,7 +58,9 @@ export const KasirPosView: React.FC<KasirPosViewProps> = ({
   onProcessPayment,
   onOpenReceipt,
   cashierName,
+  storeSettings,
 }) => {
+  const [isQrisModalOpen, setIsQrisModalOpen] = useState(false);
   // Search & filter for products in POS
   const [productSearch, setProductSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState<number | null>(null);
@@ -652,6 +657,63 @@ export const KasirPosView: React.FC<KasirPosViewProps> = ({
               </div>
             )}
 
+            {/* QRIS Payment Details in POS */}
+            {paymentMethod === 'qris' && (
+              <div className="p-3 rounded-2xl bg-red-50/80 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 space-y-2.5 animate-fade-in">
+                <div className="flex items-center justify-between pb-1.5 border-b border-red-200 dark:border-red-900/60">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded font-black text-[9px] bg-red-600 text-white tracking-wider">
+                      QRIS
+                    </span>
+                    <span className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate">
+                      {storeSettings?.qrisMerchantName || storeSettings?.namaKoperasi || 'KOPERASI EL-BAYAN'}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                    {storeSettings?.qrisNmid || 'ID1020260210001'}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  {storeSettings?.qrisImageUrl ? (
+                    <div
+                      onClick={() => setIsQrisModalOpen(true)}
+                      className="w-14 h-14 bg-white p-1 rounded-lg border border-slate-200 flex-shrink-0 cursor-pointer shadow-xs hover:ring-2 hover:ring-red-400 transition-all flex items-center justify-center"
+                      title="Klik untuk memperbesar QRIS ke pelanggan"
+                    >
+                      <img
+                        src={storeSettings.qrisImageUrl}
+                        alt="QRIS POS"
+                        className="w-full h-full object-contain rounded"
+                        style={{ imageRendering: 'pixelated' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-14 h-14 bg-white rounded-lg border border-slate-200 flex items-center justify-center flex-shrink-0 text-red-600">
+                      <QrCode className="w-6 h-6" />
+                    </div>
+                  )}
+                  <div className="text-xs space-y-0.5 flex-1 min-w-0">
+                    <p className="font-bold text-slate-800 dark:text-slate-200">
+                      Scan QRIS Meja Kasir
+                    </p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
+                      Arahkan pembeli scan QRIS dari layar kasir atau gunakan cetakan standee meja.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsQrisModalOpen(true)}
+                  className="w-full py-2 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+                >
+                  <QrCode className="w-3.5 h-3.5" />
+                  <span>Tampilkan QRIS ke Pembeli (Layar Penuh)</span>
+                </button>
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -685,6 +747,18 @@ export const KasirPosView: React.FC<KasirPosViewProps> = ({
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
+      )}
+
+      {/* Lightbox / Customer-Facing QRIS Display Modal */}
+      {storeSettings && (
+        <QrisModal
+          isOpen={isQrisModalOpen}
+          onClose={() => setIsQrisModalOpen(false)}
+          settings={storeSettings}
+          nominal={totalAmount}
+          customerName={customerName || 'Pelanggan Kasir POS'}
+          title="Tampilan Pembayaran QRIS Pelanggan POS"
+        />
       )}
     </div>
   );

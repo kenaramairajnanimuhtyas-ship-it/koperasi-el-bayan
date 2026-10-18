@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Order, OrderStatus } from '../../types';
+import { Order, OrderStatus, StoreSettings } from '../../types';
 import { formatRupiah, formatDateIndo } from '../../utils/formatters';
+import { QrisModal } from '../shared/QrisModal';
 import {
   Package,
   Clock,
@@ -15,21 +16,25 @@ import {
   Phone,
   User,
   ShoppingBag,
+  QrCode,
 } from 'lucide-react';
 
 interface PesananSayaViewProps {
   orders: Order[];
   consumerPhone?: string;
+  storeSettings?: StoreSettings;
   onNavigateKatalog: () => void;
 }
 
 export const PesananSayaView: React.FC<PesananSayaViewProps> = ({
   orders,
   consumerPhone,
+  storeSettings,
   onNavigateKatalog,
 }) => {
   const [filterStatus, setFilterStatus] = useState<string>('semua');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [qrisModalOrder, setQrisModalOrder] = useState<Order | null>(null);
 
   // Filter orders matching current consumer if phone is provided, or show all for testing ease
   const consumerOrders = orders.filter((o) => {
@@ -166,13 +171,27 @@ export const PesananSayaView: React.FC<PesananSayaViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
-                <div className="text-left sm:text-right">
+              <div className="flex items-center justify-between sm:justify-end gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800 flex-wrap">
+                <div className="text-left sm:text-right mr-1">
                   <div className="text-[9px] sm:text-[10px] text-slate-400 font-medium">Total Tagihan</div>
                   <div className="text-xs sm:text-sm font-extrabold text-emerald-600 dark:text-emerald-400">
                     {formatRupiah(order.total)}
                   </div>
                 </div>
+
+                {storeSettings && (order.metode_pembayaran === 'qris' || order.status === 'menunggu') && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setQrisModalOrder(order);
+                    }}
+                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg sm:rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all shadow-xs active:scale-95"
+                    title="Buka QRIS untuk membayar pesanan ini"
+                  >
+                    <QrCode className="w-3.5 h-3.5" />
+                    <span>Scan QRIS</span>
+                  </button>
+                )}
 
                 <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg sm:rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950 text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 text-xs font-semibold transition-colors">
                   <Eye className="w-3.5 h-3.5" />
@@ -289,7 +308,20 @@ export const PesananSayaView: React.FC<PesananSayaViewProps> = ({
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex justify-end flex-shrink-0">
+            <div className="p-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 flex-shrink-0">
+              {storeSettings && (selectedOrder.metode_pembayaran === 'qris' || selectedOrder.status === 'menunggu') ? (
+                <button
+                  type="button"
+                  onClick={() => setQrisModalOrder(selectedOrder)}
+                  className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-95"
+                >
+                  <QrCode className="w-4 h-4" />
+                  <span>Scan QRIS Tagihan</span>
+                </button>
+              ) : (
+                <div />
+              )}
+
               <button
                 onClick={() => setSelectedOrder(null)}
                 className="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl"
@@ -299,6 +331,19 @@ export const PesananSayaView: React.FC<PesananSayaViewProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* QRIS Modal for Consumer Orders */}
+      {qrisModalOrder && storeSettings && (
+        <QrisModal
+          isOpen={Boolean(qrisModalOrder)}
+          onClose={() => setQrisModalOrder(null)}
+          settings={storeSettings}
+          nominal={qrisModalOrder.total}
+          orderNumber={qrisModalOrder.no_pesanan}
+          customerName={qrisModalOrder.nama_konsumen}
+          title={`Scan QRIS Pesanan ${qrisModalOrder.no_pesanan}`}
+        />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Produk, Kategori, CartItem } from '../../types';
+import { Produk, Kategori, CartItem, StoreSettings } from '../../types';
 import { formatRupiah } from '../../utils/formatters';
+import { QrisKonsumenCard } from './QrisKonsumenCard';
 import {
   Search,
   ShoppingCart,
@@ -13,12 +14,14 @@ import {
   SlidersHorizontal,
   Package,
   ArrowRight,
+  QrCode,
 } from 'lucide-react';
 
 interface KatalogViewProps {
   products: Produk[];
   categories: Kategori[];
   cart: CartItem[];
+  storeSettings?: StoreSettings;
   onAddToCart: (product: Produk, qty: number) => void;
   onOpenCart: () => void;
 }
@@ -27,6 +30,7 @@ export const KatalogView: React.FC<KatalogViewProps> = ({
   products,
   categories,
   cart,
+  storeSettings,
   onAddToCart,
   onOpenCart,
 }) => {
@@ -122,6 +126,11 @@ export const KatalogView: React.FC<KatalogViewProps> = ({
         {/* Decorative background glow */}
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-radial from-emerald-500/20 to-transparent pointer-events-none"></div>
       </div>
+
+      {/* Komponen QRIS Pembayaran Konsumen (Database Real-time) */}
+      {storeSettings && (
+        <QrisKonsumenCard settings={storeSettings} />
+      )}
 
       {/* Search & Filtering Bar */}
       <div className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2.5 sm:space-y-3">

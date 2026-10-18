@@ -315,6 +315,10 @@ export const initialSettings: StoreSettings = {
     nomor: '712-3456-789',
     atasNama: 'KOPERASI EL-BAYAN',
   },
+  qrisMerchantName: 'KOPERASI EL-BAYAN PONPES',
+  qrisNmid: 'ID1020260210001',
+  qrisNotes: 'Mendukung semua aplikasi m-Banking (BSI, BCA, Mandiri, BRI, BNI) & e-Wallet (GoPay, OVO, ShopeePay, DANA, LinkAja)',
+  qrisUpdatedAt: '2026-02-15T08:00:00.000Z',
 };
 
 // Storage Keys
@@ -365,6 +369,10 @@ export class ElBayanDB {
     return updatedUsers;
   }
 
+  static saveUsers(usersList: User[]): void {
+    setStored(STORAGE_KEYS.USERS, usersList);
+  }
+
   static getKategori(): Kategori[] {
     return getStored<Kategori[]>(STORAGE_KEYS.KATEGORI, initialKategori);
   }
@@ -412,7 +420,15 @@ export class ElBayanDB {
   }
 
   static getSettings(): StoreSettings {
-    return getStored<StoreSettings>(STORAGE_KEYS.SETTINGS, initialSettings);
+    const stored = getStored<StoreSettings>(STORAGE_KEYS.SETTINGS, initialSettings);
+    return {
+      ...initialSettings,
+      ...stored,
+      rekeningBank: {
+        ...initialSettings.rekeningBank,
+        ...(stored.rekeningBank || {}),
+      },
+    };
   }
 
   static saveSettings(settings: StoreSettings): void {
