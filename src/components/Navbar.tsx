@@ -13,8 +13,6 @@ import {
   Store,
   LogOut,
   Lock,
-  Cloud,
-  CloudOff,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -69,30 +67,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
           )}
-
-          {/* Database Live Cloud Indicator */}
-          <div
-            className={`hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-medium border ${
-              isDbConnected
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60'
-                : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60'
-            }`}
-            title={isDbConnected ? 'Tersambung ke Cloud Firestore Database (Live Realtime)' : 'Offline / Mode Penyimpanan Lokal'}
-          >
-            {isDbConnected ? (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <Cloud className="w-3 h-3" />
-                <span className="font-semibold">Cloud DB</span>
-              </>
-            ) : (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                <CloudOff className="w-3 h-3" />
-                <span>Lokal</span>
-              </>
-            )}
-          </div>
 
           {/* Dark / Light Toggle */}
           <button
