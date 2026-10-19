@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../../types';
-import { Shield, Store, UserCheck, X, ArrowRight, Lock, ArrowLeft, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Shield, Store, UserCheck, X, ArrowRight, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 interface StaffLoginModalProps {
   initialRole?: 'admin' | 'kasir';
@@ -173,7 +173,7 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <div className="pt-2 flex flex-col items-center gap-2">
+          <div className="pt-2 flex flex-col items-center">
             <button
               type="button"
               onClick={onClose}
@@ -182,17 +182,6 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Kembali ke Katalog Konsumen</span>
             </button>
-
-            {onOpenTestingGuide && (
-              <button
-                type="button"
-                onClick={onOpenTestingGuide}
-                className="mt-1 text-[11px] text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1"
-              >
-                <Sparkles className="w-3 h-3 text-amber-500" />
-                <span>Buka Panduan Uji Skripsi (21 Skenario)</span>
-              </button>
-            )}
           </div>
         </form>
       </div>
