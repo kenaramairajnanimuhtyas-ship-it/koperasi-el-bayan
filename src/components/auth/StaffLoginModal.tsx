@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../../types';
-import { Shield, Store, UserCheck, X, ArrowRight, Lock, CheckCircle, ArrowLeft, Sparkles } from 'lucide-react';
+import { Shield, Store, UserCheck, X, ArrowRight, Lock, ArrowLeft, Sparkles, Eye, EyeOff } from 'lucide-react';
 
 interface StaffLoginModalProps {
   initialRole?: 'admin' | 'kasir';
@@ -18,19 +18,15 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
   onOpenTestingGuide,
 }) => {
   const [targetRole, setTargetRole] = useState<'admin' | 'kasir'>(initialRole);
-  const [username, setUsername] = useState(initialRole === 'admin' ? 'admin' : 'kasir');
-  const [password, setPassword] = useState(initialRole === 'admin' ? 'admin123' : 'kasir123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleRoleChange = (role: 'admin' | 'kasir') => {
     setTargetRole(role);
-    if (role === 'admin') {
-      setUsername('admin');
-      setPassword('admin123');
-    } else {
-      setUsername('kasir');
-      setPassword('kasir123');
-    }
+    setUsername('');
+    setPassword('');
     setError('');
   };
 
@@ -128,6 +124,8 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
               <input
                 type="text"
                 value={username}
+                placeholder="Masukkan username..."
+                autoComplete="username"
                 onChange={(e) => {
                   setUsername(e.target.value);
                   setError('');
@@ -145,32 +143,25 @@ export const StaffLoginModal: React.FC<StaffLoginModalProps> = ({
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
+                placeholder="Masukkan kata sandi..."
+                autoComplete="current-password"
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setError('');
                 }}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                 required
               />
-            </div>
-          </div>
-
-          {/* Quick Demo Info Pill */}
-          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-xs">
-            <div className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>Akun Demo Terverifikasi:</span>
-            </div>
-            <div className="mt-1 text-slate-600 dark:text-slate-300 space-y-0.5 font-mono text-[11px]">
-              <div>
-                {targetRole === 'admin' ? (
-                  <>Nama: <b className="text-emerald-700 dark:text-emerald-400 font-sans">Fuad</b> | User: <b className="text-emerald-700 dark:text-emerald-400">admin</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">admin123</b></>
-                ) : (
-                  <>Nama: <b className="text-emerald-700 dark:text-emerald-400 font-sans">Sabiq</b> | User: <b className="text-emerald-700 dark:text-emerald-400">kasir</b> | Pass: <b className="text-emerald-700 dark:text-emerald-400">kasir123</b></>
-                )}
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+                title={showPassword ? 'Sembunyikan kata sandi' : 'Lihat kata sandi'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 

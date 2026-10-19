@@ -24,7 +24,7 @@ export const SqlExportModal: React.FC<SqlExportModalProps> = ({ isOpen, onClose 
 
   useEffect(() => {
     if (isOpen) {
-      fetchCleanSqlScript().then((text) => setSqlContent(text));
+      fetchCleanSqlScript().then((text: string) => setSqlContent(text));
     }
   }, [isOpen]);
 

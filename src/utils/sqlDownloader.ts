@@ -49,3 +49,18 @@ export async function copySqlToClipboard(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Returns the clean in-memory SQL script without any risk of HTML contamination.
+ */
+export async function fetchCleanSqlScript(): Promise<string> {
+  return KOPERASI_ELBAYAN_SQL;
+}
+
+/**
+ * Alias for downloadPureSqlFile.
+ */
+export async function downloadCleanSqlFile(filename: string = 'koperasi_elbayan.sql'): Promise<void> {
+  downloadPureSqlFile(filename);
+}
+
